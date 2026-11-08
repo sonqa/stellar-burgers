@@ -1,7 +1,7 @@
 import { ProfileUI } from '@ui-pages';
 import { type SyntheticEvent, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@services/hooks';
-import { updateUser, logoutUser } from '@services/userSlice';
+import { updateUser } from '@services/userSlice';
 
 export const Profile = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
@@ -32,7 +32,11 @@ export const Profile = (): React.JSX.Element => {
       name: formValue.name,
       email: formValue.email,
       ...(formValue.password ? { password: formValue.password } : {}),
-    }));
+    })).then((res) => {
+      if (res.meta.requestStatus === 'fulfilled') {
+        setFormValue((prev) => ({ ...prev, password: '' }));
+      }
+    });
   };
 
   const handleCancel = (e: SyntheticEvent): void => {
@@ -51,13 +55,8 @@ export const Profile = (): React.JSX.Element => {
     }));
   };
 
-  // Выход из аккаунта
-  const handleLogout = () => {
-    dispatch(logoutUser());
-  };
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '40px' }}>
+    <div style={{ marginTop: '40px' }}>
       <ProfileUI
         formValue={formValue}
         isFormChanged={isFormChanged}
@@ -65,14 +64,6 @@ export const Profile = (): React.JSX.Element => {
         handleSubmit={handleSubmit}
         handleInputChange={handleInputChange}
       />
-      
-      {/* Наша рабочая кнопка выхода */}
-      <button 
-        onClick={handleLogout} 
-        style={{ marginTop: '30px', background: 'none', border: '1px solid #4C4CFF', color: '#4C4CFF', padding: '10px 20px', borderRadius: '20px', cursor: 'pointer', fontSize: '16px' }}
-      >
-        Выйти из аккаунта
-      </button>
     </div>
   );
 };

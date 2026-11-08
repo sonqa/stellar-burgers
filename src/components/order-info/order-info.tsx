@@ -26,7 +26,6 @@ export const OrderInfo = (): React.JSX.Element => {
   if (isLoading) return <Preloader />;
   if (!order) return <p className="text text_type_main-default">Заказ не найден</p>;
 
-  // Считаем стоимость заказа
   const orderPrice = order.ingredients.reduce((sum, id) => {
     const ingredient = ingredients.find((i) => i._id === id);
     return sum + (ingredient ? ingredient.price : 0);
