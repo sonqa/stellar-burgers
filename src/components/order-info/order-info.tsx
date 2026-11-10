@@ -1,67 +1,62 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getOrderByNumberApi } from '@api';
+import { useAppDispatch, useAppSelector } from '@services/hooks';
+import { fetchOrderByNumber } from '@services/orderSlice';
+import { OrderInfoUI } from '@ui';
 import { Preloader } from '@ui';
-import type { TOrder } from '@utils-types';
-import { useAppSelector } from '@services/hooks';
+import type { TIngredient } from '@utils-types';
 
 export const OrderInfo = (): React.JSX.Element => {
   const { number } = useParams();
-  const [order, setOrder] = useState<TOrder | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  
+  const { orderInfo, orderNumber } = useAppSelector((state) => state.order);
   const ingredients = useAppSelector((state) => state.ingredients.ingredients);
 
   useEffect(() => {
     if (number) {
-      getOrderByNumberApi(Number(number))
-        .then((data) => {
-          if (data.success && data.orders.length > 0) {
-            setOrder(data.orders[0]);
-          }
-        })
-        .finally(() => setIsLoading(false));
+      dispatch(fetchOrderByNumber(Number(number)));
     }
-  }, [number]);
+  }, [dispatch, number]);
 
-  if (isLoading) return <Preloader />;
-  if (!order) return <p className="text text_type_main-default">Заказ не найден</p>;
+  if (!orderInfo || orderInfo.number !== orderNumber) return <Preloader />;
 
-  const orderPrice = order.ingredients.reduce((sum, id) => {
-    const ingredient = ingredients.find((i) => i._id === id);
-    return sum + (ingredient ? ingredient.price : 0);
-  }, 0);
+  const ingredientsInfo = orderInfo.ingredients.reduce(
+    (acc: Record<string, TIngredient & { count: number }>, id) => {
+      const ingredient = ingredients.find((i) => i._id === id);
+      if (ingredient) {
+        if (acc[ingredient._id]) {
+          acc[ingredient._id].count++;
+        } else {
+          acc[ingredient._id] = { ...ingredient, count: 1 };
+        }
+      }
+      return acc;
+    },
+    {}
+  );
+
+  const total = Object.values(ingredientsInfo).reduce(
+    (sum, item) => sum + item.price * item.count,
+    0
+  );
+
+  const orderInfoWithData = {
+    ...orderInfo,
+    ingredientsInfo,
+    date: new Date(orderInfo.createdAt),
+    total,
+  };
 
   return (
-    <div style={{ color: 'white', textAlign: 'center', padding: '20px' }}>
-      <p className="text text_type_digits-default mb-4">#{order.number}</p>
-      <p className="text text_type_main-medium mb-2">{order.name}</p>
-      <p className="text text_type_main-default text_color_inactive mb-6">
-        Статус: {order.status === 'done' ? 'Выполнен' : order.status === 'pending' ? 'Готовится' : 'Создан'}
+    <>
+      <p
+        className='text text_type_digits-default'
+        style={{ textAlign: 'center', marginTop: '20px' }}
+      >
+        #{orderNumber?.toString().padStart(6, '0')}
       </p>
-      
-      <div className="mb-6">
-        <h3 className="text text_type_main-medium mb-2">Состав:</h3>
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {order.ingredients.map((id, index) => {
-            const ingredient = ingredients.find((i) => i._id === id);
-            if (!ingredient) return null;
-            return (
-              <li key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '10px' }}>
-                <img src={ingredient.image_mobile} alt={ingredient.name} style={{ width: '40px', height: '40px' }} />
-                <span className="text text_type_main-default">{ingredient.name}</span>
-                <span className="text text_type_digits-default">{ingredient.price} ₽</span>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
-        <span className="text text_type_main-default text_color_inactive">
-          {new Date(order.createdAt).toLocaleString('ru-RU')}
-        </span>
-        <span className="text text_type_digits-default">{orderPrice} ₽</span>
-      </div>
-    </div>
+      <OrderInfoUI orderInfo={orderInfoWithData} />
+    </>
   );
 };

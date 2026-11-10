@@ -9,7 +9,7 @@ import feedReducer from './feedSlice';
 export const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   burgerConstructor: constructorReducer,
-  order: orderReducer,
+  order: orderReducer, 
   orders: ordersReducer,
   user: userReducer,
   feed: feedReducer,
