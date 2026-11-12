@@ -57,7 +57,16 @@ const App = (): React.JSX.Element => {
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/profile/orders" element={<ProtectedRoute><ProfileOrders /></ProtectedRoute>} />
           
-          <Route path="/ingredients/:id" element={<IngredientDetails />} />
+          {/* Отдельная страница ингредиента (с заголовком по макету) */}
+          <Route 
+            path="/ingredients/:id" 
+            element={
+              <div style={{ marginTop: '120px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <h1 className="text text_type_main-large mb-6">Детали ингредиента</h1>
+                <IngredientDetails />
+              </div>
+            } 
+          />
           <Route path="/feed/:number" element={<OrderInfo />} />
           <Route path="/profile/orders/:number" element={<ProtectedRoute><OrderInfo /></ProtectedRoute>} />
           
