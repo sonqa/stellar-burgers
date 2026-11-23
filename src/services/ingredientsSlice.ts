@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getIngredientsApi } from '../utils/burger-api'; 
-import type { TIngredient } from '../utils/types';      
+import { getIngredientsApi } from '../utils/burger-api';
+import type { TIngredient } from '../utils/types';
 
 type TIngredientsState = {
   ingredients: TIngredient[];
@@ -42,7 +42,8 @@ const ingredientsSlice = createSlice({
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = (action.payload as string) || action.error.message || 'Неизвестная ошибка';
+        state.error =
+          (action.payload as string) || action.error.message || 'Неизвестная ошибка';
       });
   },
 });

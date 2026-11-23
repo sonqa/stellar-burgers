@@ -15,13 +15,29 @@ export const ProfileOrders = (): React.JSX.Element => {
   if (isLoading) return <Preloader />;
 
   return (
-    <div style={{ marginTop: '40px', color: 'white', width: '100%', maxWidth: '800px', margin: '0 auto' }}>
+    <div
+      style={{
+        marginTop: '40px',
+        color: 'white',
+        width: '100%',
+        maxWidth: '800px',
+        margin: '0 auto',
+      }}
+    >
       <h2 className="text text_type_main-large mb-6">История заказов</h2>
-      
+
       {orders.length === 0 ? (
         <p className="text text_type_main-default">У вас пока нет заказов.</p>
       ) : (
-        <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <ul
+          style={{
+            listStyle: 'none',
+            padding: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+          }}
+        >
           {orders.map((order) => (
             <OrderCard key={order._id} order={order} />
           ))}

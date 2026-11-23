@@ -28,11 +28,13 @@ export const Profile = (): React.JSX.Element => {
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
-    dispatch(updateUser({
-      name: formValue.name,
-      email: formValue.email,
-      ...(formValue.password ? { password: formValue.password } : {}),
-    })).then((res) => {
+    dispatch(
+      updateUser({
+        name: formValue.name,
+        email: formValue.email,
+        ...(formValue.password ? { password: formValue.password } : {}),
+      })
+    ).then((res) => {
       if (res.meta.requestStatus === 'fulfilled') {
         setFormValue((prev) => ({ ...prev, password: '' }));
       }

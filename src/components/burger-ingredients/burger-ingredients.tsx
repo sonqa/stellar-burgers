@@ -10,7 +10,7 @@ export const BurgerIngredients = (): React.JSX.Element => {
   const titleBunRef = useRef<HTMLHeadingElement>(null);
   const titleMainRef = useRef<HTMLHeadingElement>(null);
   const titleSaucesRef = useRef<HTMLHeadingElement>(null);
-  
+
   const ingredients = useAppSelector((state) => state.ingredients.ingredients);
 
   const [bunsRef, inViewBuns] = useInView({

@@ -7,7 +7,10 @@ type TProtectedRouteProps = {
   children: React.JSX.Element;
 };
 
-export const ProtectedRoute = ({ onlyUnAuth = false, children }: TProtectedRouteProps) => {
+export const ProtectedRoute = ({
+  onlyUnAuth = false,
+  children,
+}: TProtectedRouteProps) => {
   const { user, isAuthChecked } = useAppSelector((state) => state.user);
   const location = useLocation();
 

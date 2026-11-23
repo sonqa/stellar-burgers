@@ -31,14 +31,9 @@ const constructorSlice = createSlice({
       },
     },
     removeIngredient: (state, action: PayloadAction<string>) => {
-      state.ingredients = state.ingredients.filter(
-        (item) => item.id !== action.payload
-      );
+      state.ingredients = state.ingredients.filter((item) => item.id !== action.payload);
     },
-    moveIngredient: (
-      state,
-      action: PayloadAction<{ from: number; to: number }>
-    ) => {
+    moveIngredient: (state, action: PayloadAction<{ from: number; to: number }>) => {
       const { from, to } = action.payload;
       const item = state.ingredients[from];
       state.ingredients.splice(from, 1);
@@ -51,11 +46,7 @@ const constructorSlice = createSlice({
   },
 });
 
-export const {
-  addIngredient,
-  removeIngredient,
-  moveIngredient,
-  clearConstructor,
-} = constructorSlice.actions;
+export const { addIngredient, removeIngredient, moveIngredient, clearConstructor } =
+  constructorSlice.actions;
 
 export default constructorSlice.reducer;

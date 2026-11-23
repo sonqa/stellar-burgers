@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { 
-  registerUserApi, 
-  loginUserApi, 
-  getUserApi, 
-  updateUserApi, 
-  logoutApi 
-} from '@api'; 
+import {
+  registerUserApi,
+  loginUserApi,
+  getUserApi,
+  updateUserApi,
+  logoutApi,
+} from '@api';
 import type { TUser } from '@utils-types';
 import type { TRegisterData, TLoginData } from '@api';
 import { setCookie, deleteCookie } from '@utils/cookie';
@@ -20,15 +20,12 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const loginUser = createAsyncThunk(
-  'user/login',
-  async (data: TLoginData) => {
-    const response = await loginUserApi(data);
-    setCookie('accessToken', response.accessToken);
-    localStorage.setItem('refreshToken', response.refreshToken);
-    return response.user;
-  }
-);
+export const loginUser = createAsyncThunk('user/login', async (data: TLoginData) => {
+  const response = await loginUserApi(data);
+  setCookie('accessToken', response.accessToken);
+  localStorage.setItem('refreshToken', response.refreshToken);
+  return response.user;
+});
 
 export const getUser = createAsyncThunk('user/getUser', async () => {
   const response = await getUserApi();
@@ -69,7 +66,10 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(registerUser.pending, (state) => { state.isLoading = true; state.error = null; })
+      .addCase(registerUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload;
@@ -79,7 +79,10 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message || 'Ошибка регистрации';
       })
-      .addCase(loginUser.pending, (state) => { state.isLoading = true; state.error = null; })
+      .addCase(loginUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload;
@@ -94,7 +97,7 @@ const userSlice = createSlice({
         state.isAuthChecked = true;
       })
       .addCase(getUser.rejected, (state) => {
-        state.isAuthChecked = true; 
+        state.isAuthChecked = true;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.user = action.payload;

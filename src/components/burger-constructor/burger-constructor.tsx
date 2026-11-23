@@ -1,6 +1,6 @@
 import { BurgerConstructorUI } from '@ui';
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@services/hooks';
 import { createOrder, clearOrder } from '@services/orderSlice';
 import { clearConstructor } from '@services/constructorSlice';
@@ -8,13 +8,13 @@ import type { TConstructorIngredient } from '@utils-types';
 
 export const BurgerConstructor = (): React.JSX.Element | null => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const constructorItems = useAppSelector((state) => state.burgerConstructor);
   const orderRequest = useAppSelector((state) => state.order.orderRequest);
   const orderModalData = useAppSelector((state) => state.order.orderData);
 
-  const user = useAppSelector((state) => state.user.user); 
+  const user = useAppSelector((state) => state.user.user);
 
   const onOrderClick = (): void => {
     if (!constructorItems.bun || orderRequest) return;

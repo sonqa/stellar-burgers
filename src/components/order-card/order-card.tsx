@@ -29,7 +29,10 @@ export const OrderCard = memo(function OrderCard({
 
     const total = ingredientsInfo.reduce((acc, item) => acc + item.price, 0);
     const ingredientsToShow = ingredientsInfo.slice(0, maxIngredients);
-    const remains = ingredientsInfo.length > maxIngredients ? ingredientsInfo.length - maxIngredients : 0;
+    const remains =
+      ingredientsInfo.length > maxIngredients
+        ? ingredientsInfo.length - maxIngredients
+        : 0;
     const date = new Date(order.createdAt);
 
     return {

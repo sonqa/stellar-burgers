@@ -16,10 +16,6 @@ export const FeedInfo = (): React.JSX.Element => {
   const pendingOrders = getOrders(orders, 'pending');
 
   return (
-    <FeedInfoUI 
-      readyOrders={readyOrders} 
-      pendingOrders={pendingOrders} 
-      feed={feed} 
-    />
+    <FeedInfoUI readyOrders={readyOrders} pendingOrders={pendingOrders} feed={feed} />
   );
 };

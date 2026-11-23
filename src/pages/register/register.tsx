@@ -11,7 +11,7 @@ export const Register = (): React.JSX.Element => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  
+
   const error = useAppSelector((state) => state.user.error);
 
   const handleSubmit = (e: SyntheticEvent): void => {

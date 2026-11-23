@@ -9,7 +9,7 @@ import type { TIngredient } from '@utils-types';
 export const OrderInfo = (): React.JSX.Element => {
   const { number } = useParams();
   const dispatch = useAppDispatch();
-  
+
   const { orderInfo, orderNumber } = useAppSelector((state) => state.order);
   const ingredients = useAppSelector((state) => state.ingredients.ingredients);
 
@@ -51,7 +51,7 @@ export const OrderInfo = (): React.JSX.Element => {
   return (
     <>
       <p
-        className='text text_type_digits-default'
+        className="text text_type_digits-default"
         style={{ textAlign: 'center', marginTop: '20px' }}
       >
         #{orderNumber?.toString().padStart(6, '0')}

@@ -105,7 +105,7 @@ export const getOrdersApi = (): Promise<TOrder[]> =>
     method: 'GET',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
-      authorization: getToken(), 
+      authorization: getToken(),
     } as HeadersInit,
   }).then((data) => {
     if (data?.success) return data.orders;
@@ -122,7 +122,7 @@ export const orderBurgerApi = (data: string[]): Promise<TNewOrderResponse> =>
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
-      authorization: getToken(), 
+      authorization: getToken(),
     } as HeadersInit,
     body: JSON.stringify({
       ingredients: data,
@@ -225,7 +225,7 @@ type TUserResponse = TServerResponse<{ user: TUser }>;
 export const getUserApi = (): Promise<TUserResponse> =>
   fetchWithRefresh<TUserResponse>(`${URL}/auth/user`, {
     headers: {
-      authorization: getToken(), 
+      authorization: getToken(),
     } as HeadersInit,
   });
 
@@ -234,7 +234,7 @@ export const updateUserApi = (user: Partial<TRegisterData>): Promise<TUserRespon
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
-      authorization: getToken(), 
+      authorization: getToken(),
     } as HeadersInit,
     body: JSON.stringify(user),
   });
