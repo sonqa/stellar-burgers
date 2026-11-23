@@ -12,7 +12,6 @@ test.describe('Конструктор бургера', () => {
   test('Добавление ингредиента (булки) в конструктор', async ({ page }) => {
     await expect(page.getByText('Краторная булка N-200i')).toBeVisible({ timeout: 10000 });
     await expect(page.getByText('Выберите булки').first()).toBeVisible();
-
     await page.getByText('Добавить').first().click();
     await expect(page.getByText('Краторная булка N-200i').last()).toBeVisible();
   });
