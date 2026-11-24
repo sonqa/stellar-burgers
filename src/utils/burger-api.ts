@@ -1,8 +1,12 @@
 import { setCookie, getCookie } from './cookie';
-
 import type { TIngredient, TOrder, TUser } from './types';
 
-const URL = process.env.BURGER_API_URL;
+const URL = process.env.BURGER_API_URL || 'https://norma.ffapi.ru/api';
+
+const getToken = () => {
+  const token = getCookie('accessToken');
+  return token ? decodeURIComponent(token) : '';
+};
 
 const checkResponse = <T>(res: Response): Promise<T> =>
   res.ok ? res.json() : res.json().then((err) => Promise.reject(toApiError(err)));
@@ -11,11 +15,6 @@ type TServerResponse<T = unknown> = {
   success: boolean;
 } & T;
 
-/**
- * The API signals failure with a JSON payload rather than an HTTP error, so the
- * payload is wrapped in a real Error before rejecting. The original body is
- * kept in `cause` for debugging.
- */
 const toApiError = (payload: unknown): Error => {
   const message =
     typeof payload === 'object' &&
@@ -106,7 +105,7 @@ export const getOrdersApi = (): Promise<TOrder[]> =>
     method: 'GET',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
-      authorization: getCookie('accessToken'),
+      authorization: getToken(), 
     } as HeadersInit,
   }).then((data) => {
     if (data?.success) return data.orders;
@@ -123,7 +122,7 @@ export const orderBurgerApi = (data: string[]): Promise<TNewOrderResponse> =>
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
-      authorization: getCookie('accessToken'),
+      authorization: getToken(), 
     } as HeadersInit,
     body: JSON.stringify({
       ingredients: data,
@@ -226,7 +225,7 @@ type TUserResponse = TServerResponse<{ user: TUser }>;
 export const getUserApi = (): Promise<TUserResponse> =>
   fetchWithRefresh<TUserResponse>(`${URL}/auth/user`, {
     headers: {
-      authorization: getCookie('accessToken'),
+      authorization: getToken(), 
     } as HeadersInit,
   });
 
@@ -235,7 +234,7 @@ export const updateUserApi = (user: Partial<TRegisterData>): Promise<TUserRespon
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
-      authorization: getCookie('accessToken'),
+      authorization: getToken(), 
     } as HeadersInit,
     body: JSON.stringify(user),
   });
