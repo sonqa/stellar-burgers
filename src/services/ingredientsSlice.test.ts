@@ -29,8 +29,12 @@ describe('ingredientsSlice reducer', () => {
   });
 
   it('должен обработать fetchIngredients.pending', () => {
+    const stateWithError = {
+      ...initialState,
+      error: 'Старая ошибка',
+    };
     const action = { type: fetchIngredients.pending.type };
-    const newState = reducer(initialState, action);
+    const newState = reducer(stateWithError, action);
     expect(newState).toEqual({
       ...initialState,
       isLoading: true,
@@ -39,11 +43,15 @@ describe('ingredientsSlice reducer', () => {
   });
 
   it('должен обработать fetchIngredients.fulfilled', () => {
+    const loadingState = {
+      ...initialState,
+      isLoading: true,
+    };
     const action = {
       type: fetchIngredients.fulfilled.type,
       payload: mockIngredients,
     };
-    const newState = reducer(initialState, action);
+    const newState = reducer(loadingState, action);
     expect(newState).toEqual({
       ...initialState,
       ingredients: mockIngredients,
@@ -52,16 +60,20 @@ describe('ingredientsSlice reducer', () => {
   });
 
   it('должен обработать fetchIngredients.rejected', () => {
+    const loadingState = {
+      ...initialState,
+      isLoading: true,
+    };
     const action = {
       type: fetchIngredients.rejected.type,
-      payload: 'Ошибка при загрузке ингредиентов',
-      error: { message: 'Ошибка при загрузке ингредиентов' },
+      payload: 'Ошибка из payload',
+      error: { message: 'Ошибка из error.message' },
     };
-    const newState = reducer(initialState, action);
+    const newState = reducer(loadingState, action);
     expect(newState).toEqual({
       ...initialState,
       isLoading: false,
-      error: 'Ошибка при загрузке ингредиентов',
+      error: 'Ошибка из payload',
     });
   });
 });

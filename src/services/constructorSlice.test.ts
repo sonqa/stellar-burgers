@@ -8,7 +8,7 @@ import type { TIngredient, TConstructorIngredient } from '../utils/types';
 
 // Мокаем nanoid, чтобы id были предсказуемыми (например, 'mock-id')
 jest.mock('nanoid', () => ({
-  nanoid: () => 'mock-id',
+  nanoid: (): string => 'mock-id',
 }));
 
 describe('burgerConstructor reducer', () => {
@@ -67,14 +67,18 @@ describe('burgerConstructor reducer', () => {
   });
 
   it('должен обработать removeIngredient', () => {
-    // Сначала добавим ингредиент, чтобы было что удалять
-    const stateWithIngredient = {
+    const stateWithIngredients = {
       bun: null,
-      ingredients: [{ ...expectedMain, id: 'to-be-removed' }],
+      ingredients: [
+        { ...expectedMain, id: '1' },
+        { ...expectedMain, id: '2' },
+        { ...expectedMain, id: '3' },
+      ],
     };
 
-    const newState = reducer(stateWithIngredient, removeIngredient('to-be-removed'));
-    expect(newState.ingredients).toEqual([]);
+    const newState = reducer(stateWithIngredients, removeIngredient('2'));
+    expect(newState.ingredients).toHaveLength(2);
+    expect(newState.ingredients.map((ingredient) => ingredient.id)).toEqual(['1', '3']);
   });
 
   it('должен обработать moveIngredient', () => {
